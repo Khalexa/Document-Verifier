@@ -1,13 +1,20 @@
 import os
-from flask import Blueprint, render_template, request, current_app, redirect, url_for, flash
+from flask import Blueprint, render_template, request, current_app, redirect, url_for, flash, send_from_directory, session
+from markupsafe import Markup
 from models import db, Student, Certificate
 from utils import generate_certificate_pdf, compute_sha256
+import secrets
+from models import DownloadToken
 
 issue_bp = Blueprint("issue_bp", __name__)
 
 
 @issue_bp.route("/issue", methods=["GET", "POST"])
 def issue_certificate():
+
+    if not session.get('admin_logged_in'):
+        flash('Please log in as admin to access issuing.', 'error')
+        return redirect(url_for('login'))
 
     if request.method == "POST":
         name = request.form.get("name")
@@ -38,17 +45,66 @@ def issue_certificate():
         )
 
         db.session.add(certificate)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            flash("Failed to save certificate to database.", "error")
+            return redirect(url_for("issue_bp.issue_certificate"))
 
         pdf_filename = f"cert_{certificate.id}.pdf"
         pdf_path = os.path.join(current_app.config["CERT_FOLDER"], pdf_filename)
 
-        generate_certificate_pdf(student, certificate, pdf_path)
+        try:
+            generate_certificate_pdf(student, certificate, pdf_path)
+            certificate.certificate_hash = compute_sha256(pdf_path)
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            flash("Certificate generated but failed to compute hash.", "error")
+            return redirect(url_for("issue_bp.issue_certificate"))
 
-        certificate.certificate_hash = compute_sha256(pdf_path)
+        token = secrets.token_urlsafe(24)
+        dt = DownloadToken(certificate_id=certificate.id, token=token)
+        db.session.add(dt)
         db.session.commit()
 
-        flash("Certificate issued successfully.", "success")
-        return redirect(url_for("issue_bp.issue_certificate"))
+        download_url = url_for('issue_bp.token_download', token=token)
+        flash(Markup(f"Certificate issued successfully. <a href='{download_url}'>One-time download</a>"), "success")
+        return render_template(
+            "issue.html",
+            issued=True,
+            pdf_filename=pdf_filename
+        )
 
     return render_template("issue.html")
+
+
+@issue_bp.route('/certificate/<filename>')
+def download_certificate(filename):
+    from flask import session
+    if not session.get('admin_logged_in'):
+        flash('Please log in as admin to download certificates.', 'error')
+        return redirect(url_for('login'))
+
+    return send_from_directory(current_app.config['CERT_FOLDER'], filename, as_attachment=True)
+
+
+@issue_bp.route('/token-download/<token>')
+def token_download(token):
+    t = DownloadToken.query.filter_by(token=token).first()
+    if not t or t.used:
+        flash('Invalid or expired download link.', 'error')
+        return redirect(url_for('index'))
+
+    cert = Certificate.query.get(t.certificate_id)
+    if not cert:
+        flash('Certificate not found.', 'error')
+        return redirect(url_for('index'))
+
+
+    t.used = True
+    db.session.commit()
+
+    filename = f"cert_{cert.id}.pdf"
+    return send_from_directory(current_app.config['CERT_FOLDER'], filename, as_attachment=True)
