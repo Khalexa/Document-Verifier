@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from config import Config
 from models import db, Student, Certificate, VerificationLog
-from utils import compute_sha256, extract_text, parse_certificate_text
+# import heavy utilities lazily inside routes to avoid import-time failures in CI
 import os
 
 app = Flask(__name__)
@@ -54,6 +54,9 @@ def admin_panel():
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    # local import to avoid pulling heavy dependencies during app import
+    from utils import compute_sha256, extract_text, parse_certificate_text
+
     file = request.files['file']
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(filepath)

@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint, render_template, request, current_app, flash
 from models import db, Certificate, VerificationLog
-from utils import compute_sha256, extract_text, parse_certificate_text, similarity
+# import utils inside the request handler to avoid import-time dependency issues
 
 verify_bp = Blueprint("verify_bp", __name__)
 
@@ -10,6 +10,8 @@ verify_bp = Blueprint("verify_bp", __name__)
 def verify_certificate():
 
     if request.method == "POST":
+        # local imports to avoid importing heavy binary deps during module import
+        from utils import compute_sha256, extract_text, parse_certificate_text, similarity
 
         file = request.files.get("file")
         if not file:
