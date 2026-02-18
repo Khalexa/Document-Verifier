@@ -7,4 +7,5 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
     CERT_FOLDER = os.path.join(BASE_DIR, 'certificates')
+    ADMIN_PASSWORD = "admin"
     

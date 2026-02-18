@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Verify Certificate</h2>
+<form method="post" enctype="multipart/form-data">
+  <label>Upload PDF: <input type="file" name="file" accept="application/pdf" required></label><br>
+  <button type="submit">Verify</button>
+</form>
+{% if error %}
+  <p class="error">{{ error }}</p>
+{% endif %}
+{% endblock %}

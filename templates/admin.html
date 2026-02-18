@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Admin panel</h2>
+
+<h3>Certificates</h3>
+{% if certs %}
+	<table border="1" cellpadding="6" cellspacing="0">
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Matric</th>
+			<th>Degree</th>
+			<th>Class</th>
+			<th>GPA</th>
+			<th>Year</th>
+			<th>Hash</th>
+		</tr>
+		{% for c in certs %}
+		<tr>
+			<td>{{ c.id }}</td>
+			<td>{{ c.student.full_name }}</td>
+			<td>{{ c.student.matric_number }}</td>
+			<td>{{ c.degree_title }}</td>
+			<td>{{ c.degree_class }}</td>
+			<td>{{ c.gpa }}</td>
+			<td>{{ c.graduation_year }}</td>
+			<td style="font-family:monospace;">{{ c.certificate_hash }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% else %}
+	<p>No certificates yet.</p>
+{% endif %}
+
+<h3>Recent Verification Logs</h3>
+{% if logs %}
+	<table border="1" cellpadding="6" cellspacing="0">
+		<tr>
+			<th>Time</th>
+			<th>Uploaded File</th>
+			<th>Extracted Name</th>
+			<th>Extracted Matric</th>
+			<th>DB Match</th>
+			<th>Hash Match</th>
+			<th>Confidence</th>
+		</tr>
+		{% for l in logs %}
+		<tr>
+			<td>{{ l.timestamp }}</td>
+			<td>{{ l.uploaded_filename }}</td>
+			<td>{{ l.extracted_name }}</td>
+			<td>{{ l.extracted_matric }}</td>
+			<td>{{ l.db_match }}</td>
+			<td>{{ l.hash_match }}</td>
+			<td>{{ l.confidence_score }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% else %}
+	<p>No verification logs yet.</p>
+{% endif %}
+{% endblock %}
