@@ -1,5 +1,95 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Welcome to Document Verifier</h1>
-  <p>Use the links above to issue certificates or verify them.</p>
+<!-- Hero Section -->
+<section class="relative flex items-center justify-center h-[600px] bg-cover bg-center"
+      style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/static/images/bg.jpg');">
+  
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 animate-fadeInDown">
+      Secure Certificate Verification System
+    </h1>
+
+    <p class="text-lg text-gray-200 mb-8 animate-fadeInUp">
+      A modern platform for issuing and verifying academic certificates quickly, securely, and efficiently.
+    </p>
+
+    <div class="flex justify-center gap-4 animate-fadeInUp delay-200">
+      <!-- Issue Button with Icon -->
+      <a href="{{ url_for('issue_bp.issue_certificate') }}"
+         class="bg-primary text-white px-8 py-3 rounded-lg shadow-lg hover:scale-105 transition transform flex items-center gap-2 justify-center">
+         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+         </svg>
+         Issue Certificate
+      </a>
+
+      <!-- Verify Button with Icon -->
+      <a href="{{ url_for('verify_bp.verify_certificate') }}"
+         class="bg-accent text-primary px-8 py-3 rounded-lg shadow-lg hover:scale-105 transition transform flex items-center gap-2 justify-center">
+         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+         </svg>
+         Verify Certificate
+      </a>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Features Section -->
+<section class="mt-20">
+  <h2 class="text-3xl font-bold text-center text-primary mb-12">
+    Why Use Our System?
+  </h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <div class="bg-white p-8 rounded-xl shadow hover:shadow-xl transition text-center">
+      <div class="text-accent text-4xl mb-4">🔒</div>
+      <h3 class="text-xl font-semibold text-primary mb-2">Secure</h3>
+      <p class="text-gray-600">All certificates are protected and validated through a secure system.</p>
+    </div>
+
+    <div class="bg-white p-8 rounded-xl shadow hover:shadow-xl transition text-center">
+      <div class="text-accent text-4xl mb-4">⚡</div>
+      <h3 class="text-xl font-semibold text-primary mb-2">Fast Processing</h3>
+      <p class="text-gray-600">Generate and verify certificates instantly with minimal effort.</p>
+    </div>
+
+    <div class="bg-white p-8 rounded-xl shadow hover:shadow-xl transition text-center">
+      <div class="text-accent text-4xl mb-4">🎓</div>
+      <h3 class="text-xl font-semibold text-primary mb-2">Academic Ready</h3>
+      <p class="text-gray-600">Designed specifically for schools, universities, and institutions.</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- How It Works -->
+<section class="mt-20 bg-primary text-white rounded-2xl p-12 text-center">
+  <h2 class="text-3xl font-bold mb-10">How It Works</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div>
+      <h3 class="text-xl font-semibold text-accent mb-2">1. Admin Issues</h3>
+      <p>Admin enters student details and generates certificate.</p>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-semibold text-accent mb-2">2. Unique Code</h3>
+      <p>A secure verification code is generated.</p>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-semibold text-accent mb-2">3. Public Verification</h3>
+      <p>Anyone can verify certificate authenticity online.</p>
+    </div>
+  </div>
+</section>
 {% endblock %}

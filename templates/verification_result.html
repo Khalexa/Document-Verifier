@@ -1,7 +1,87 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Verification Results</h2>
-<p>Database match: {{ db_match }}</p>
-<p>Hash match: {{ hash_match }}</p>
-<p>Confidence score: {{ confidence }}</p>
+
+<section class="flex justify-center items-center py-16">
+  <div class="bg-white shadow-xl rounded-2xl p-10 w-full max-w-lg animate-fadeInUp">
+
+    <!-- Heading -->
+    <h2 class="text-2xl md:text-3xl font-bold text-primary text-center mb-6">
+      Verification Results
+    </h2>
+
+    <p class="text-gray-600 text-center mb-8">
+      Below are the results of your certificate verification.
+    </p>
+
+    <!-- Results Card -->
+    <div class="space-y-4">
+
+      <!-- Database Match -->
+      <div class="flex justify-between items-center bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
+        <span class="font-medium text-gray-700">Database Match</span>
+        {% if db_match %}
+          <span class="bg-green-100 text-green-700 font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+            ✔ Success
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+          </span>
+        {% else %}
+          <span class="bg-red-100 text-red-700 font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+            ✖ Failed
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </span>
+        {% endif %}
+      </div>
+
+      <!-- Hash Match -->
+      <div class="flex justify-between items-center bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
+        <span class="font-medium text-gray-700">Hash Match</span>
+        {% if hash_match %}
+          <span class="bg-green-100 text-green-700 font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+            ✔ Success
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+          </span>
+        {% else %}
+          <span class="bg-red-100 text-red-700 font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+            ✖ Failed
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </span>
+        {% endif %}
+      </div>
+
+      <!-- Confidence Score -->
+      <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
+        <div class="flex justify-between mb-2">
+          <span class="font-medium text-gray-700">Confidence Score</span>
+          <span class="font-semibold text-primary">{{ confidence }}%</span>
+        </div>
+        <div class="bg-accent h-4 rounded-full transition-all duration-500"
+        :style="width: {{ confidence }}%">
+   </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-8 text-center">
+      <a href="{{ url_for('verify_bp.verify_certificate') }}"
+         class="bg-accent text-primary px-6 py-3 rounded-lg shadow-lg hover:scale-105 transition transform font-semibold flex items-center justify-center gap-2 mx-auto">
+         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+         </svg>
+         Back to Verify
+      </a>
+    </div>
+
+  </div>
+</section>
+
 {% endblock %}

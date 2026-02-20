@@ -1,8 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Admin Login</h2>
-<form method="post">
-  <label>Password: <input type="password" name="password" required></label>
-  <button type="submit">Login</button>
-</form>
+
+<section class="flex justify-center items-center min-h-screen bg-gray-50">
+  <div class="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-md animate-fadeInUp">
+    
+    <!-- Heading -->
+    <h2 class="text-2xl md:text-3xl font-bold text-primary text-center mb-6">
+      Admin Login
+    </h2>
+
+    <p class="text-gray-600 text-center mb-8">
+      Enter your password to access the admin panel.
+    </p>
+
+    <!-- Login Form -->
+    <form method="post" class="flex flex-col gap-6">
+      
+      <!-- Password Input -->
+      <label class="flex flex-col text-gray-700">
+        <span class="mb-2 font-medium">Password</span>
+        <input type="password" name="password" required
+               class="border border-gray-300 rounded-lg p-3 hover:border-primary focus:outline-none focus:ring-2 focus:ring-accent transition"/>
+      </label>
+
+      <!-- Submit Button -->
+      <button type="submit"
+              class="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-900 hover:scale-105 transition transform font-semibold flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+        Login
+      </button>
+
+    </form>
+
+    <!-- Optional error message -->
+    {% if error %}
+      <p class="text-red-600 font-medium text-center mt-4">{{ error }}</p>
+    {% endif %}
+
+  </div>
+</section>
+
 {% endblock %}

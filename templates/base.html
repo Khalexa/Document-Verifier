@@ -1,43 +1,115 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>Document Verifier</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 2rem; }
-    header nav a { margin-right: 1rem; }
-    .container { max-width: 800px; margin: auto; }
-    .flash { padding: 0.5rem; border: 1px solid #ccc; background: #f9f9f9; }
-    .error { color: red; }
-  </style>
-</head>
-<body>
-<header>
-  <nav>
-    <a href="{{ url_for('index') }}">Home</a>
-    {% if session.get('admin_logged_in') %}
-      <a href="{{ url_for('issue_bp.issue_certificate') }}">Issue</a>
-    {% endif %}
-    <a href="{{ url_for('verify_bp.verify_certificate') }}">Verify</a>
-    {% if session.get('admin_logged_in') %}
-      <a href="{{ url_for('admin_panel') }}">Admin</a>
-      <a href="{{ url_for('logout') }}">Logout</a>
-    {% else %}
-      <a href="{{ url_for('login') }}">Admin Login</a>
-    {% endif %}
-  </nav>
-  <hr>
-</header>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#00008B",
+            accent: "#FFBF00",
+          }
+        }
+      }
+    }
+  </script>
 
-<div class="container">
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="flash {{ category }}">{{ message|safe }}</div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-  {% block content %}{% endblock %}
-</div>
+  <!-- Animations -->
+  <style>
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fadeInDown {
+      animation: fadeInDown 1s ease-out forwards;
+    }
+    
+    .animate-fadeInUp {
+      animation: fadeInUp 1s ease-out forwards;
+    }
+    
+    .animate-fadeInUp.delay-200 {
+      animation-delay: 0.2s;
+    }
+    </style>
+
+
+
+  <style>
+    /* Optional: custom colors or fonts */
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+
+  
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Header / Navbar -->
+  <header class="bg-primary text-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center py-6 px-6">
+      
+      <a href="{{ url_for('index') }}" class="text-2xl font-bold tracking-wide">
+        🎓 DocVerifier
+      </a>
+  
+      <nav class="space-x-6 text-sm md:text-base">
+        <a href="{{ url_for('index') }}" class="hover:text-accent transition">Home</a>
+  
+        {% if session.get('admin_logged_in') %}
+          <a href="{{ url_for('issue_bp.issue_certificate') }}" class="hover:text-accent transition">Issue</a>
+        {% endif %}
+  
+        <a href="{{ url_for('verify_bp.verify_certificate') }}" class="hover:text-accent transition">Verify</a>
+  
+        {% if session.get('admin_logged_in') %}
+          <a href="{{ url_for('admin_panel') }}" class="hover:text-accent transition">Admin</a>
+          <a href="{{ url_for('logout') }}" class="bg-accent text-primary px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition">
+            Logout
+          </a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="bg-accent text-primary px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition">
+            Admin Login
+          </a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <!-- Flash Messages -->
+  <div class="container mx-auto mt-6 px-6">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="space-y-2">
+          {% for category, message in messages %}
+            <div class="p-4 rounded shadow 
+                        {% if category == 'error' %}bg-red-100 text-red-700 border border-red-300{% else %}bg-green-100 text-green-700 border border-green-300{% endif %}">
+              {{ message|safe }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Main Content -->
+  <main class="container mx-auto my-10 px-6">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white shadow py-4 mt-12 text-center text-gray-500 text-sm">
+    &copy; 2026 Document Verifier
+  </footer>
+
 </body>
 </html>

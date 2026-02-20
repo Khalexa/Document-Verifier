@@ -1,11 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Verify Certificate</h2>
-<form method="post" enctype="multipart/form-data">
-  <label>Upload PDF: <input type="file" name="file" accept="application/pdf" required></label><br>
-  <button type="submit">Verify</button>
-</form>
-{% if error %}
-  <p class="error">{{ error }}</p>
-{% endif %}
+
+<section class="flex justify-center items-center py-16">
+  <div class="bg-white shadow-xl rounded-2xl p-10 w-full max-w-lg animate-fadeInUp">
+    <h2 class="text-2xl md:text-3xl font-bold text-primary text-center mb-6">
+      Verify Certificate
+    </h2>
+
+    <p class="text-gray-600 text-center mb-6">
+      Upload your certificate PDF to verify its authenticity instantly.
+    </p>
+
+    <!-- Form -->
+    <form method="post" enctype="multipart/form-data" class="flex flex-col gap-6">
+      
+      <!-- File Upload -->
+      <label class="flex flex-col text-gray-700">
+        <span class="mb-2 font-medium">Upload PDF</span>
+        <input type="file" name="file" accept="application/pdf" required
+               class="border border-gray-300 rounded-lg p-3 hover:border-primary focus:outline-none focus:ring-2 focus:ring-accent transition"/>
+      </label>
+
+      <!-- Submit Button -->
+      <button type="submit"
+              class="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-900 hover:scale-105 transition transform font-semibold flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        Verify
+      </button>
+
+      <!-- Error Message -->
+      {% if error %}
+        <p class="text-red-600 font-medium text-center">{{ error }}</p>
+      {% endif %}
+
+    </form>
+  </div>
+</section>
+
 {% endblock %}
